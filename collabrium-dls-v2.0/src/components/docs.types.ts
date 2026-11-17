@@ -1,0 +1,100 @@
+// The shape of every component's <Name>.docs.tsx file.
+// The documentation site (playground) renders component pages from these
+// files only. Keep each docs file consistent with <Name>.usage.md, which
+// stays the written reference for AI and developers.
+// Not part of the package build (tsup skips *.docs.tsx and this file).
+import type { ReactNode } from 'react';
+
+/** One live example: a title, a sentence, the rendered preview and its source. */
+export interface DocsExample {
+  /** Stable id, used for the section anchor (#example-<id>). kebab-case. */
+  id: string;
+  title: string;
+  description: string;
+  render: () => ReactNode;
+  /** The exact source shown in the Code tab. Keep it in step with render. */
+  code: string;
+}
+
+/** One part of the component, for the Anatomy tree. */
+export interface DocsAnatomyNode {
+  name: string;
+  /** The element or class that renders it, e.g. `<button>.cui-button`. */
+  element?: string;
+  description: string;
+  /** Present only in some configurations, e.g. "with leadingIcon". */
+  when?: string;
+  children?: DocsAnatomyNode[];
+}
+
+export interface DocsProp {
+  name: string;
+  /** The allowed values as written in TypeScript, e.g. `'sm' | 'md' | 'lg'`. */
+  options: string;
+  default: string;
+  description: string;
+  required?: boolean;
+}
+
+export interface DocsRules {
+  do: string[];
+  dont: string[];
+}
+
+export interface DocsKeyboard {
+  /** Keys, e.g. "Enter / Space". */
+  keys: string;
+  action: string;
+}
+
+export interface DocsAccessibility {
+  /** Key table, or one sentence when there is no keyboard interaction. */
+  keyboard: DocsKeyboard[] | string;
+  notes: string[];
+}
+
+export interface DocsMotion {
+  interaction: string;
+  motion: string;
+  /** Token(s) used, e.g. "--duration-fast · --ease-standard". */
+  token: string;
+}
+
+/**
+ * Everything a component docs file exports. Inline `code` in any string
+ * field is written with backticks and rendered as code.
+ *
+ * Only `title` and `description` are required. Every page shows every
+ * section; a section whose field is missing (or empty) shows its heading
+ * with "Coming soon." under it. When there is genuinely nothing to say
+ * (no motion, no keyboard interaction), write that in a sentence instead.
+ */
+export interface ComponentDocs {
+  /** Sidebar and page title. */
+  title: string;
+  /**
+   * Puts the component under a group, for a family the DLS documents as one
+   * component with several parts (AI Native). Write the group's name, for
+   * example `export const group = 'AI Native'`. The part then drops out of the
+   * sidebar and home grid, and its page lives at
+   * `components/<group-slug>/<part-slug>`, reached from the group's overview
+   * page. The group needs an overview file at
+   * `playground/content/groups/<group-slug>.tsx`. Leave it out for a
+   * component that stands alone.
+   */
+  group?: string;
+  /** One line under the title. */
+  description: string;
+  /** Minimal import + example for the Usage section. */
+  usage?: string;
+  /** Small live preview for the home page grid. Defaults to the first example. */
+  thumbnail?: () => ReactNode;
+  anatomy?: DocsAnatomyNode[];
+  /** The first example is also the main preview at the top of the page. */
+  examples?: DocsExample[];
+  props?: DocsProp[];
+  rules?: DocsRules;
+  accessibility?: DocsAccessibility;
+  /** Motion table, or one sentence when the component doesn't animate. */
+  motion?: DocsMotion[] | string;
+}

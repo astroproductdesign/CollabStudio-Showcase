@@ -1,0 +1,84 @@
+/*
+  Copied verbatim from collabrium-dls/components.css (DLS v0.9.124) for
+  DLS components that @collabrium/ui has not converted yet. Same class
+  names, same rules. Do not edit here; when a component is converted,
+  delete its block and use the React component instead.
+
+  Raw px values inside these blocks are the DLS's own (see the
+  playground report); new playground CSS lives in docs.css and uses
+  tokens only.
+*/
+
+/* ===== Utility: .sr-only — components.css lines 5213–5213 ===== */
+.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+
+/* ===== Back button — components.css lines 4407–4417 ===== */
+/* Back button (Level 2+ navigation) — designed from scratch, fulfils App
+   Shell's own reserved Level 2 placeholder. All four states reuse Button
+   Ghost's own tokens directly (hover Neutral-2, active/pressed Neutral-3,
+   focus-visible Obsidian outline) — no new color introduced. Sits above
+   .c-pageheader in markup, never inside it. */
+.c-back-button-row{margin-bottom:var(--spacing-12);}
+.c-back-button{display:inline-flex; align-items:center; gap:var(--spacing-8); padding:var(--spacing-8) var(--spacing-12); border:none; background:transparent; border-radius:var(--radius-sm); font-family:var(--font-primary); font-size:var(--text-label2-size); font-weight:var(--text-label2-weight); color:var(--color-neutral-9); cursor:pointer; transition:background-color var(--duration-fast) var(--ease-standard);}
+.c-back-button i{font-size:var(--icon-sm);}
+.c-back-button:hover{background:var(--color-neutral-2);}
+.c-back-button:active{background:var(--color-neutral-3);}
+.c-back-button:focus-visible{outline:2px solid var(--color-obsidian); outline-offset:2px;}
+
+/* ===== Radio / Switch (shared .c-choice) — components.css lines 3077–3096 (the Checkbox rules, 3087–3088, now live in @collabrium/ui) ===== */
+/* Checkbox / Radio / Switch. position:relative anchors the hidden native
+   input to its own row: without it the input is placed against the page,
+   so clicking the label focuses an input far below the layout and the
+   browser scrolls the window to a blank area. */
+.c-choice{position:relative; display:flex; align-items:flex-start; gap:var(--spacing-8); cursor:pointer;}
+.c-choice.disabled{opacity:.5; cursor:not-allowed;}
+.c-choice input{position:absolute; opacity:0; width:0; height:0;}
+.c-choice .text{display:flex; flex-direction:column;}
+.c-choice .text .label{font-size:var(--text-body1-size); font-weight:500; color:var(--color-neutral-9);}
+.c-choice .text .desc{font-size:var(--text-caption-size); color:var(--color-neutral-5);}
+.c-radio-circle{width:18px; height:18px; flex:none; margin-top:2px; border-radius:var(--radius-pill); border:1px solid var(--color-neutral-3); background:var(--color-neutral-1); display:flex; align-items:center; justify-content:center; transition:border-color var(--duration-fast) var(--ease-standard);}
+.c-radio-circle.on{border-color:var(--color-obsidian);}
+.c-radio-circle .dot{width:9px; height:9px; border-radius:var(--radius-pill); background:var(--color-obsidian);}
+.c-choice.switch{align-items:center; gap:var(--spacing-12);}
+.c-switch-track{position:relative; width:40px; height:24px; flex:none; border-radius:var(--radius-pill); background:var(--color-neutral-4); transition:background-color var(--duration-base) var(--ease-standard);}
+.c-switch-track.on{background:var(--color-green);}
+.c-switch-thumb{position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:var(--radius-pill); background:var(--color-neutral-1); box-shadow:var(--shadow-1); transition:left var(--duration-base) var(--ease-settle);}
+.c-switch-track.on .c-switch-thumb{left:19px;}
+
+/* ===== Back to top — components.css lines 5100–5135 ===== */
+/* Back to top — Jump to present's page-level sibling, kept right after it
+   (and inside Chat window's run) so the shared recipe and the three
+   deliberate differences stay visible side by side: bottom-right, not
+   bottom-centre; position:fixed, not absolute in a wrapper; no
+   new-content dot. Per DESIGN-SYSTEM.md, Back to top. */
+:root{
+  /* Resting gap from the viewport's bottom and right edges. spacing-12 on
+     phones, matching Toast and Action bar. */
+  --c-back-to-top-edge:var(--spacing-24);
+  /* The resolved bottom offset, declared once so the button and Toast's
+     stacked rule (see Toast host) can never disagree. The higher of:
+     the resting gap — or a page's own --c-back-to-top-bottom, set on
+     <html> above a permanent bottom bar — plus the phone's safe area; or
+     an open Action bar's --c-action-bar-clearance, which its script
+     writes on <html> (already includes its own gap and safe area, 0 when
+     closed). */
+  --c-back-to-top-y:max(calc(var(--c-back-to-top-bottom, var(--c-back-to-top-edge)) + env(safe-area-inset-bottom, 0px)), var(--c-action-bar-clearance, 0px));
+}
+@media (max-width:640px){
+  :root{--c-back-to-top-edge:var(--spacing-12);}
+}
+.c-back-to-top{--c-back-to-top-move:var(--duration-base); position:fixed; right:calc(var(--c-back-to-top-edge) + env(safe-area-inset-right, 0px)); bottom:var(--c-back-to-top-y); z-index:20; width:32px; height:32px; padding:0; border-radius:var(--radius-pill); display:flex; align-items:center; justify-content:center; background:var(--color-neutral-1); border:1px solid var(--color-neutral-3); box-shadow:var(--shadow-2); color:var(--color-neutral-9); cursor:pointer; opacity:0; visibility:hidden; transform:translateY(8px); transition:opacity var(--duration-base) var(--ease-settle), transform var(--duration-base) var(--ease-settle), visibility 0s linear var(--duration-base), background-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard), bottom var(--c-back-to-top-move) var(--ease-standard);}
+.c-back-to-top i{font-size:var(--icon-sm);}
+/* Transparent hit-area lift to 44px — the 32px box never changes size. */
+.c-back-to-top::after{content:''; position:absolute; inset:-6px;}
+.c-back-to-top:hover{background:var(--color-neutral-2); box-shadow:var(--shadow-3);}
+.c-back-to-top:focus-visible{outline:2px solid var(--color-obsidian); outline-offset:2px;}
+/* Visibility flips at 0s on the way in (focusable at once) and is held
+   for the whole fade on the way out, so a hidden button is never left
+   invisible-but-focusable. */
+.c-back-to-top.is-visible{opacity:1; visibility:visible; transform:translateY(0); transition:opacity var(--duration-base) var(--ease-settle), transform var(--duration-base) var(--ease-settle), visibility 0s linear 0s, background-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard), bottom var(--c-back-to-top-move) var(--ease-standard);}
+/* Reduced motion: no 8px travel and no glide when an Action bar lifts it
+   — but keep the fade, because the visibility timing still matters. */
+@media (prefers-reduced-motion:reduce){
+  .c-back-to-top, .c-back-to-top.is-visible{transform:none; --c-back-to-top-move:0s;}
+}
